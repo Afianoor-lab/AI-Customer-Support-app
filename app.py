@@ -2,36 +2,34 @@ import streamlit as st
 from textblob import TextBlob
 
 # ===============================
-# 🎨 UI Styling (Like your Screenshot)
+# 🎨 UI Styling (Final Dark Theme)
 # ===============================
 st.markdown("""
     <style>
-    /* Main background from your image */
+    /* Main background */
     .stApp {
         background-color: #6366f1; 
     }
     
-    /* Result Box (Dark like input box) */
+    /* Result Box - Matches the dark input look */
     .result-box {
-        background-color: #262730; /* Dark background like selectbox/input */
+        background-color: #1e1e1e; 
         border-left: 10px solid #8b5cf6;
         padding: 25px;
         border-radius: 15px;
         margin-top: 25px;
-        color: #ffffff; /* Text color forced to white for visibility */
+        color: #ffffff;
         box-shadow: 0px 10px 20px rgba(0,0,0,0.4);
     }
     
-    /* Labels in result box should be visible on dark */
     .result-box b {
         color: #ffffff !important;
     }
 
-    h1 {
-        color: white;
+    h1, h3 {
+        color: white !important;
         text-align: center;
         font-family: 'Segoe UI', Tahoma, sans-serif;
-        margin-bottom: 30px;
     }
     
     label {
@@ -39,13 +37,14 @@ st.markdown("""
         font-weight: bold;
     }
     
+    /* Forcing dark style on all text inputs */
     textarea {
         border-radius: 10px !important;
-        border: 2px solid transparent !important;
-        background-color: #262730 !important; /* Forces dark input */
+        background-color: #1e1e1e !important;
         color: #ffffff !important;
     }
 
+    /* Process Message Button */
     .stButton>button {
         background-color: #8b5cf6 !important;
         color: white !important;
@@ -59,10 +58,11 @@ st.markdown("""
     
     /* --- DARK HISTORY SECTION --- */
     div[data-testid="stNotification"] {
-        background-color: #262730 !important; /* Dark like input box */
-        color: #ffffff !important; /* White text for info box */
+        background-color: #1e1e1e !important; 
+        color: #ffffff !important; 
         border-radius: 10px;
         border: 1px solid #475569;
+        margin-bottom: 10px;
     }
     
     div[data-testid="stNotification"] div {
@@ -70,7 +70,7 @@ st.markdown("""
     }
 
     div[data-testid="stNotification"] svg {
-        fill: #ffffff !important; /* Information icon color */
+        fill: #ffffff !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -120,11 +120,10 @@ def generate_reply(category):
     return replies.get(category, "Thank you for contacting us.")
 
 # ===============================
-# 🖥️ Frontend Layout (Updated with Dark Boxes)
+# 🖥️ Frontend Layout
 # ===============================
 st.markdown("<h1>AI Customer Support System</h1>", unsafe_allow_html=True)
 
-# Input field direct background par hai (CSS forces it dark)
 message = st.text_area("Enter Customer Message:", placeholder="Type here...", height=100)
 
 if st.button("Process Message"):
@@ -143,7 +142,7 @@ if st.button("Process Message"):
         }
         st.session_state.history.append(result)
 
-        # --- Display Result Box (Now Dark with White Text) ---
+        # --- Display Result Box ---
         st.markdown(f"""
             <div class="result-box">
                 <p style="font-size: 18px;"><b>Input:</b> {message}</p>
@@ -154,9 +153,8 @@ if st.button("Process Message"):
             </div>
         """, unsafe_allow_html=True)
 
-# --- Message History Section (Styled Dark) ---
+# --- Message History Section ---
 if st.session_state.history:
-    st.markdown("<h3 style='color:white; margin-top:40px;'>Message History</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='margin-top:40px;'>Message History</h3>", unsafe_allow_html=True)
     for h in reversed(st.session_state.history):
-        # Using st.info which is now styled as dark with white text
         st.info(f"**{h['message']}** → {h['category']}")
