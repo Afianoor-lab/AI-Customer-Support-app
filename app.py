@@ -2,81 +2,79 @@ import streamlit as st
 from textblob import TextBlob
 
 # ===============================
-# 🎨 UI Styling (Final Dark Theme)
+# 🎨 UI Styling (High-Priority Dark Theme)
 # ===============================
 st.markdown("""
     <style>
-    /* Main background */
+    /* Main Background */
     .stApp {
-        background-color: #6366f1; 
+        background-color: #6366f1 !important; 
     }
     
-    /* Result Box - Matches the dark input look */
+    /* 1. Result Box - Forced Dark Black */
     .result-box {
-        background-color: #1e1e1e; 
-        border-left: 10px solid #8b5cf6;
-        padding: 25px;
-        border-radius: 15px;
-        margin-top: 25px;
-        color: #ffffff;
-        box-shadow: 0px 10px 20px rgba(0,0,0,0.4);
+        background-color: #1e1e1e !important; 
+        border-left: 10px solid #8b5cf6 !important;
+        padding: 25px !important;
+        border-radius: 15px !important;
+        margin-top: 25px !important;
+        color: #ffffff !important;
+        box-shadow: 0px 10px 20px rgba(0,0,0,0.4) !important;
     }
     
-    .result-box b {
+    .result-box p, .result-box b, .result-box span {
         color: #ffffff !important;
     }
 
+    /* 2. Message History (st.info) - Forced Dark Black */
+    div[data-testid="stNotification"], 
+    div[class*="stAlert"], 
+    .st-ae {
+        background-color: #1e1e1e !important; 
+        color: white !important;
+        border: 1px solid #475569 !important;
+        border-radius: 10px !important;
+    }
+
+    /* History ke andar ka text force-white */
+    div[data-testid="stNotificationContent"] p, 
+    div[data-testid="stNotificationContent"] b,
+    div[data-testid="stNotificationContent"] div {
+        color: white !important;
+    }
+
+    /* 3. Input Text Area - Forced Dark */
+    .stTextArea textarea {
+        background-color: #1e1e1e !important;
+        color: white !important;
+        border: 1px solid #475569 !important;
+    }
+
+    /* Headers */
     h1, h3 {
         color: white !important;
-        text-align: center;
-        font-family: 'Segoe UI', Tahoma, sans-serif;
-    }
-    
-    label {
-        color: white !important;
-        font-weight: bold;
-    }
-    
-    /* Forcing dark style on all text inputs */
-    textarea {
-        border-radius: 10px !important;
-        background-color: #1e1e1e !important;
-        color: #ffffff !important;
+        text-align: center !important;
+        font-family: 'Segoe UI', Tahoma, sans-serif !important;
     }
 
-    /* Process Message Button */
+    /* Button Styling */
     .stButton>button {
         background-color: #8b5cf6 !important;
         color: white !important;
         border-radius: 10px !important;
-        width: 100%;
+        font-weight: bold !important;
+        width: 100% !important;
+        height: 50px !important;
         border: none !important;
-        height: 50px;
-        font-size: 18px;
-        font-weight: bold;
     }
     
-    /* --- DARK HISTORY SECTION --- */
-    div[data-testid="stNotification"] {
-        background-color: #1e1e1e !important; 
-        color: #ffffff !important; 
-        border-radius: 10px;
-        border: 1px solid #475569;
-        margin-bottom: 10px;
-    }
-    
-    div[data-testid="stNotification"] div {
-        color: #ffffff !important;
-    }
-
-    div[data-testid="stNotification"] svg {
-        fill: #ffffff !important;
-    }
+    /* Hide default streamlit icons if they interfere */
+    .st-emotion-cache-1avcm0n { color: white !important; }
     </style>
 """, unsafe_allow_html=True)
 
 # ===============================
-# 🧠 Backend Logic
+# 🧠 Backend Logic (Unchanged)
 # ===============================
 if 'history' not in st.session_state:
     st.session_state.history = []
@@ -142,7 +140,7 @@ if st.button("Process Message"):
         }
         st.session_state.history.append(result)
 
-        # --- Display Result Box ---
+        # --- Display Result Box (Dark) ---
         st.markdown(f"""
             <div class="result-box">
                 <p style="font-size: 18px;"><b>Input:</b> {message}</p>
@@ -153,7 +151,7 @@ if st.button("Process Message"):
             </div>
         """, unsafe_allow_html=True)
 
-# --- Message History Section ---
+# --- Message History Section (Dark) ---
 if st.session_state.history:
     st.markdown("<h3 style='margin-top:40px;'>Message History</h3>", unsafe_allow_html=True)
     for h in reversed(st.session_state.history):
