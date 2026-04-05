@@ -2,38 +2,43 @@ import streamlit as st
 from textblob import TextBlob
 
 # ===============================
-# 🎨 UI Styling (Like your Screenshot)
+# 🎨 UI Styling (Updated)
 # ===============================
 st.markdown("""
     <style>
     .stApp {
-        background-color: #6366f1; /* Purple/Blue background from your image */
+        background-color: #6366f1; /* Purple/Blue background */
     }
-    .main-container {
-        background-color: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
-        margin-top: 20px;
-    }
+    /* Sirf result ke liye box styling */
     .result-box {
-        background-color: #f8fafc;
-        border-left: 5px solid #6366f1;
-        padding: 20px;
-        border-radius: 8px;
-        margin-top: 20px;
+        background-color: white;
+        border-left: 10px solid #8b5cf6;
+        padding: 25px;
+        border-radius: 15px;
+        margin-top: 25px;
         color: #1e293b;
+        box-shadow: 0px 10px 20px rgba(0,0,0,0.2);
     }
     h1 {
         color: white;
         text-align: center;
         font-family: 'Segoe UI', Tahoma, sans-serif;
+        margin-bottom: 30px;
+    }
+    /* Labels ka color white karne ke liye */
+    label {
+        color: white !important;
+        font-weight: bold;
     }
     .stButton>button {
         background-color: #8b5cf6 !important;
         color: white !important;
-        border-radius: 8px !important;
+        border-radius: 10px !important;
         width: 100%;
+        border: none !important;
+        height: 50px;
+        font-size: 18px;
+        font-weight: bold;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -83,46 +88,42 @@ def generate_reply(category):
     return replies.get(category, "Thank you for contacting us.")
 
 # ===============================
-# 🖥️ Frontend Layout
+# 🖥️ Frontend Layout (Clean Version)
 # ===============================
 st.markdown("<h1>AI Customer Support System</h1>", unsafe_allow_html=True)
 
-with st.container():
-    st.markdown('<div class="main-container">', unsafe_allow_html=True)
-    
-    message = st.text_area("Enter Customer Message:", placeholder="Type here...", height=100)
-    
-    if st.button("Process Message"):
-        if message.strip() == "":
-            st.warning("Please enter a message first!")
-        else:
-            category = classify_message(message)
-            sentiment = analyze_sentiment(message)
-            reply = generate_reply(category)
-            
-            result = {
-                "message": message,
-                "category": category,
-                "sentiment": sentiment,
-                "reply": reply
-            }
-            st.session_state.history.append(result)
+# Input field ab direct background par hai
+message = st.text_area("Enter Customer Message:", placeholder="Type here...", height=100)
 
-            # Display Result
-            st.markdown(f"""
-                <div class="result-box">
-                    <p><b>Input:</b> {message}</p>
-                    <p><b>Category:</b> {category}</p>
-                    <p><b>Sentiment:</b> {sentiment}</p>
-                    <hr>
-                    <p><b>Auto-Reply:</b> {reply}</p>
-                </div>
-            """, unsafe_allow_html=True)
+if st.button("Process Message"):
+    if message.strip() == "":
+        st.warning("Please enter a message first!")
+    else:
+        category = classify_message(message)
+        sentiment = analyze_sentiment(message)
+        reply = generate_reply(category)
+        
+        result = {
+            "message": message,
+            "category": category,
+            "sentiment": sentiment,
+            "reply": reply
+        }
+        st.session_state.history.append(result)
 
-    st.markdown('</div>', unsafe_allow_html=True)
+        # Display Result Box
+        st.markdown(f"""
+            <div class="result-box">
+                <p style="font-size: 18px;"><b>Input:</b> {message}</p>
+                <p style="font-size: 18px;"><b>Category:</b> <span style="color: #6366f1;">{category}</span></p>
+                <p style="font-size: 18px;"><b>Sentiment:</b> {sentiment}</p>
+                <hr style="border-top: 1px solid #cbd5e1;">
+                <p style="font-size: 18px;"><b>Auto-Reply:</b> <br><i>{reply}</i></p>
+            </div>
+        """, unsafe_allow_html=True)
 
 # Message History Section
 if st.session_state.history:
-    st.markdown("<h3 style='color:white; margin-top:30px;'>Message History</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='color:white; margin-top:40px;'>Message History</h3>", unsafe_allow_html=True)
     for h in reversed(st.session_state.history):
         st.info(f"**{h['message']}** → {h['category']}")
