@@ -2,34 +2,50 @@ import streamlit as st
 from textblob import TextBlob
 
 # ===============================
-# 🎨 UI Styling (Updated)
+# 🎨 UI Styling (Like your Screenshot)
 # ===============================
 st.markdown("""
     <style>
+    /* Main background from your image */
     .stApp {
-        background-color: #6366f1; /* Purple/Blue background */
+        background-color: #6366f1; 
     }
-    /* Sirf result ke liye box styling */
+    
+    /* Result Box (Dark like input box) */
     .result-box {
-        background-color: white;
+        background-color: #262730; /* Dark background like selectbox/input */
         border-left: 10px solid #8b5cf6;
         padding: 25px;
         border-radius: 15px;
         margin-top: 25px;
-        color: #1e293b;
-        box-shadow: 0px 10px 20px rgba(0,0,0,0.2);
+        color: #ffffff; /* Text color forced to white for visibility */
+        box-shadow: 0px 10px 20px rgba(0,0,0,0.4);
     }
+    
+    /* Labels in result box should be visible on dark */
+    .result-box b {
+        color: #ffffff !important;
+    }
+
     h1 {
         color: white;
         text-align: center;
         font-family: 'Segoe UI', Tahoma, sans-serif;
         margin-bottom: 30px;
     }
-    /* Labels ka color white karne ke liye */
+    
     label {
         color: white !important;
         font-weight: bold;
     }
+    
+    textarea {
+        border-radius: 10px !important;
+        border: 2px solid transparent !important;
+        background-color: #262730 !important; /* Forces dark input */
+        color: #ffffff !important;
+    }
+
     .stButton>button {
         background-color: #8b5cf6 !important;
         color: white !important;
@@ -39,6 +55,22 @@ st.markdown("""
         height: 50px;
         font-size: 18px;
         font-weight: bold;
+    }
+    
+    /* --- DARK HISTORY SECTION --- */
+    div[data-testid="stNotification"] {
+        background-color: #262730 !important; /* Dark like input box */
+        color: #ffffff !important; /* White text for info box */
+        border-radius: 10px;
+        border: 1px solid #475569;
+    }
+    
+    div[data-testid="stNotification"] div {
+        color: #ffffff !important;
+    }
+
+    div[data-testid="stNotification"] svg {
+        fill: #ffffff !important; /* Information icon color */
     }
     </style>
 """, unsafe_allow_html=True)
@@ -88,11 +120,11 @@ def generate_reply(category):
     return replies.get(category, "Thank you for contacting us.")
 
 # ===============================
-# 🖥️ Frontend Layout (Clean Version)
+# 🖥️ Frontend Layout (Updated with Dark Boxes)
 # ===============================
 st.markdown("<h1>AI Customer Support System</h1>", unsafe_allow_html=True)
 
-# Input field ab direct background par hai
+# Input field direct background par hai (CSS forces it dark)
 message = st.text_area("Enter Customer Message:", placeholder="Type here...", height=100)
 
 if st.button("Process Message"):
@@ -111,19 +143,20 @@ if st.button("Process Message"):
         }
         st.session_state.history.append(result)
 
-        # Display Result Box
+        # --- Display Result Box (Now Dark with White Text) ---
         st.markdown(f"""
             <div class="result-box">
                 <p style="font-size: 18px;"><b>Input:</b> {message}</p>
-                <p style="font-size: 18px;"><b>Category:</b> <span style="color: #6366f1;">{category}</span></p>
+                <p style="font-size: 18px;"><b>Category:</b> <span style="color: #6366f1; font-weight: bold;">{category}</span></p>
                 <p style="font-size: 18px;"><b>Sentiment:</b> {sentiment}</p>
-                <hr style="border-top: 1px solid #cbd5e1;">
+                <hr style="border-top: 1px solid #475569;">
                 <p style="font-size: 18px;"><b>Auto-Reply:</b> <br><i>{reply}</i></p>
             </div>
         """, unsafe_allow_html=True)
 
-# Message History Section
+# --- Message History Section (Styled Dark) ---
 if st.session_state.history:
     st.markdown("<h3 style='color:white; margin-top:40px;'>Message History</h3>", unsafe_allow_html=True)
     for h in reversed(st.session_state.history):
+        # Using st.info which is now styled as dark with white text
         st.info(f"**{h['message']}** → {h['category']}")
